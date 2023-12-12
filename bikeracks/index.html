@@ -39,7 +39,7 @@
       
       map.addListener('zoom_changed', () => {
         let zoomLevel = map.getZoom();
-        let size = zoomLevel * 4; // Example dynamic size based on zoom level
+        let size = zoomLevel * 3; // Example dynamic size based on zoom level
         markers.forEach(marker => {
           marker.setIcon({
             url: 'https://storage.googleapis.com/bikebucket123/3448289.png',
@@ -103,4 +103,3 @@
   </script>
 </body>
 </html>
-
