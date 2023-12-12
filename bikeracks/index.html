@@ -27,7 +27,7 @@
   <div id="map"></div>
 
   <script>
-    let map, infoWindow, customIcon;
+    let map, infoWindow, customIcon, markerCluster;
 
     function initMap() {
       customIcon = {
@@ -80,7 +80,7 @@
       fetch('https://storage.googleapis.com/bikebucket123/AusBikeParking.json.json')
         .then(response => response.json())
         .then(data => {
-          data.elements.forEach(element => {
+          const markers = data.elements.map(element => {
             let position;
             if (element.type === 'node') {
               position = { lat: element.lat, lng: element.lon };
@@ -94,7 +94,6 @@
             if (position) {
               const marker = new google.maps.Marker({
                 position: position,
-                map: map,
                 icon: customIcon,
                 title: element.tags.name || 'Bicycle Parking'
               });
@@ -110,20 +109,30 @@
                 infoWindow.setContent(contentString);
                 infoWindow.open(map, marker);
               });
+              return marker;
             }
+          });
+
+          // Initialize clustering after markers are added
+          markerCluster = new MarkerClusterer(map, markers, {
+            imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'
           });
         })
         .catch(error => console.error('Error loading data: ', error));
     }
 
-    // This will need to be replaced with your actual API key
     const apiKey = 'AIzaSyDjfeR-Ui2ydhCpRpiRlj7uEoajSMQ8_8c';
 
     // Load the Google Maps API script dynamically
     const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap`;
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=initMap`;
     script.async = true;
     document.head.appendChild(script);
+
+    // Load the MarkerClusterer script dynamically
+    const clusterScript = document.createElement('script');
+    clusterScript.src = 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js';
+    document.head.appendChild(clusterScript);
   </script>
 </body>
 </html>
