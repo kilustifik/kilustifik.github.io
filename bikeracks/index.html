@@ -26,8 +26,9 @@
   <h3>LT's Bike Racks Map</h3>
   <div id="map"></div>
 
+  <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
   <script>
-    let map, infoWindow, customIcon, markerCluster;
+    let map, infoWindow, customIcon, markerClusterer;
 
     function initMap() {
       customIcon = {
@@ -41,8 +42,8 @@
       });
 
       infoWindow = new google.maps.InfoWindow();
+      const markers = []; // Array to hold all markers for clustering
 
-      // Try HTML5 geolocation
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           (position) => {
@@ -59,11 +60,10 @@
           }
         );
       } else {
-        // Browser doesn't support Geolocation
         handleLocationError(false, infoWindow, map.getCenter());
       }
 
-      fetchMarkers();
+      fetchMarkers(markers);
     }
 
     function handleLocationError(browserHasGeolocation, infoWindow, pos) {
@@ -76,11 +76,11 @@
       infoWindow.open(map);
     }
 
-    function fetchMarkers() {
+    function fetchMarkers(markers) {
       fetch('https://storage.googleapis.com/bikebucket123/AusBikeParking.json.json')
         .then(response => response.json())
         .then(data => {
-          const markers = data.elements.map(element => {
+          data.elements.forEach(element => {
             let position;
             if (element.type === 'node') {
               position = { lat: element.lat, lng: element.lon };
@@ -98,6 +98,8 @@
                 title: element.tags.name || 'Bicycle Parking'
               });
 
+              markers.push(marker);
+
               marker.addListener('click', () => {
                 let contentString = `<div><h3>${element.tags.name || 'Bicycle Parking'}</h3>`;
                 Object.entries(element.tags).forEach(([key, value]) => {
@@ -109,12 +111,10 @@
                 infoWindow.setContent(contentString);
                 infoWindow.open(map, marker);
               });
-              return marker;
             }
           });
 
-          // Initialize clustering after markers are added
-          markerCluster = new MarkerClusterer(map, markers, {
+          markerClusterer = new MarkerClusterer(map, markers, {
             imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'
           });
         })
@@ -122,17 +122,10 @@
     }
 
     const apiKey = 'AIzaSyDjfeR-Ui2ydhCpRpiRlj7uEoajSMQ8_8c';
-
-    // Load the Google Maps API script dynamically
     const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=initMap`;
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap`;
     script.async = true;
     document.head.appendChild(script);
-
-    // Load the MarkerClusterer script dynamically
-    const clusterScript = document.createElement('script');
-    clusterScript.src = 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js';
-    document.head.appendChild(clusterScript);
   </script>
 </body>
 </html>
