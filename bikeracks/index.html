@@ -11,15 +11,29 @@
     }
     h3 {
       margin: 0;
-      padding: 10px;
-      text-align: center;
-      background-color: #f8f9fa;
-      height: 40px; /* Header height */
+      padding: 10px 20px; /* Adjusted padding for better alignment */
+      text-align: left; /* Aligns the text to the left */
+      background-color: #000; /* Black background */
+      color: #fff; /* White text */
+      font-family: 'Roboto', sans-serif; /* Modern font */
+      display: flex;
+      align-items: center;
+      height: 60px; /* Slightly larger header height */
     }
     #map {
-      height: calc(100% - 40px); /* Adjust the map height considering the header */
+      height: calc(100% - 60px); /* Adjust the map height considering the new header size */
       width: 100%;
     }
+    .logo {
+      height: 40px; /* Adjust as needed */
+      width: auto;
+      margin-right: 15px;
+    }
+  </style>
+</head>
+<body>
+  <h3><img src="https://storage.googleapis.com/bikebucket123/Bike%20Icon%20LT2.png" class="logo" alt="Logo">LT's Bike Racks Map</h3>
+  <div id="map"></div>
   </style>
 </head>
 <body>
@@ -70,10 +84,7 @@
       infoWindow.setPosition(pos);
       infoWindow.setContent(
         browserHasGeolocation
-          ? 'Error: The Geolocation service failed.'
-          : 'Error: Your browser doesn\'t support geolocation.'
       );
-      infoWindow.open(map);
     }
 
     function fetchMarkers(markers) {
