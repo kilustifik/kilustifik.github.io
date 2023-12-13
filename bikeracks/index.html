@@ -52,10 +52,7 @@
         center: { lat: -25.2744, lng: 133.7751 }
       });
 
-      infoWindow = new google.maps.InfoWindow({
-        maxWidth: 300, // Set the maximum width for the info window
-      });
-      
+      infoWindow = new google.maps.InfoWindow();
       handleGeolocation();
 
       fetchMarkers();
@@ -144,6 +141,10 @@
           }
         });
         contentString += '</div>';
+
+        // Set the maximum width for the info window
+        infoWindow.setOptions({ maxWidth: 300 });
+
         infoWindow.setContent(contentString);
         infoWindow.open(map, marker);
       });
