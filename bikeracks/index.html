@@ -64,7 +64,6 @@
 <body>
   <h3><img src="https://storage.googleapis.com/bikebucket123/Bike%20Icon%20LT2.png" class="logo" alt="Logo">LT's Bike Racks Map</h3>
   <div id="map"></div>
-
   <div class="footer">
     <p>Developed by <a href="https://kilustifik.github.io" target="_blank">kilustifik</a></p>
   </div>
@@ -83,7 +82,9 @@
       infoWindow = new google.maps.InfoWindow();
       handleGeolocation();
 
-      fetchMarkers();
+      google.maps.event.addListenerOnce(map, 'idle', function(){
+        fetchMarkers();
+      });
 
       markerClusterer = new MarkerClusterer(map, markers, {
         imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
@@ -145,10 +146,8 @@
         .then(response => response.json())
         .then(data => {
           data.forEach(element => {
-            if (element.lat && element.lon) {
-              let position = { lat: element.lat, lng: element.lon };
-              createMarker(position, element);
-            }
+            let position = { lat: element.lat, lng: element.lon };
+            createMarker(position, element);
           });
         })
         .catch(error => console.error('Error loading data: ', error));
@@ -175,7 +174,7 @@
       markers.push(marker);
       marker.addListener('click', () => {
         let contentString = `<div class="info-content"><h3 class="info-title">${title}</h3><p>${element.formatted}</p>`;
-        
+
         // Additional fields to display
         const additionalFields = [
           "capacity",
