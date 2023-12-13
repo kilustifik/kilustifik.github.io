@@ -30,6 +30,14 @@
       margin-right: 15px;
     }
 
+    /* Responsive design for desktops */
+    @media only screen and (min-width: 769px) {
+      .custom-marker-icon {
+        width: 40px;
+        height: 40px;
+      }
+    }
+
     /* Responsive design for mobile devices */
     @media only screen and (max-width: 768px) {
       .logo {
@@ -46,15 +54,10 @@
   <!-- Include MarkerClusterer library -->
   <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
   <script>
-    let map, infoWindow, customIcon, markerClusterer;
+    let map, infoWindow, markerClusterer;
     let markers = []; // Array to hold all markers for clustering
 
     function initMap() {
-      customIcon = {
-        url: 'https://storage.googleapis.com/bikebucket123/3448289.png',
-        scaledSize: new google.maps.Size(40, 40) // Default size, will be updated on resize
-      };
-
       map = new google.maps.Map(document.getElementById('map'), {
         zoom: 4,
         center: { lat: -25.2744, lng: 133.7751 }
@@ -86,18 +89,6 @@
         imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
         maxZoom: 15 // Clustering stops at this zoom level
       });
-
-      // Adjust icon sizes when the window is resized
-      window.addEventListener('resize', resizeIcons);
-      resizeIcons(); // Call once for initial sizing
-    }
-
-    function resizeIcons() {
-      const isMobile = window.innerWidth < 768;
-      const iconSize = isMobile ? new google.maps.Size(60, 60) : new google.maps.Size(40, 40);
-      
-      customIcon.scaledSize = iconSize;
-      markers.forEach(marker => marker.setIcon(customIcon));
     }
 
     function handleLocationError(browserHasGeolocation, infoWindow, pos) {
@@ -126,6 +117,11 @@
             }
 
             if (position) {
+              const customIcon = {
+                url: 'https://storage.googleapis.com/bikebucket123/3448289.png',
+                scaledSize: new google.maps.Size(60, 60) // Larger default size for better visibility on mobile
+              };
+
               const marker = new google.maps.Marker({
                 position: position,
                 icon: customIcon,
