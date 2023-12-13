@@ -22,7 +22,7 @@
       height: 60px;
     }
     #map {
-      height: calc(100% - 90px); /* Adjust height to accommodate smaller footer */
+      height: calc(100% - 70px); /* Adjust height to accommodate smaller footer */
       width: 100%;
     }
     .footer {
@@ -156,12 +156,12 @@
         position: position,
         icon: customIcon,
         map: map,
-        title: element.tags.name or 'Bicycle Parking'
+        title: element.tags.name || 'Bicycle Parking'
       });
 
       markers.push(marker);
       marker.addListener('click', () => {
-        let contentString = `<div class="info-content"><h3 class="info-title">${element.tags.name or 'Bicycle Parking'}</h3>`;
+        let contentString = `<div class="info-content"><h3 class="info-title">${element.tags.name || 'Bicycle Parking'}</h3>`;
         Object.entries(element.tags).forEach(([key, value]) => {
           if (value) {
             contentString += `<p class="info-detail"><b>${key}:</b> ${value}</p>`;
