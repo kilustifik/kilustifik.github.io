@@ -43,20 +43,24 @@
       width: auto;
       margin-right: 15px;
     }
+    .info-content {
+      font-size: 16px;
+      max-width: 300px;
+    }
+    .info-title {
+      font-size: 16px; /* Keep font size */
+      margin: 0; /* Remove any default margins */
+      padding: 5px 10px; /* Reduce padding to decrease banner height */
+      background-color: #000; /* Maintain the black background */
+      color: #fff; /* Text color */
+    }
+    .info-detail {
+      margin-bottom: 8px;
+    }
     @media only screen and (max-width: 768px) {
       .logo {
         height: 60px;
         width: auto;
-      }
-      .info-content {
-        font-size: 16px;
-        max-width: 300px;
-      }
-      .info-title {
-        font-size: 16px;
-      }
-      .info-detail {
-        margin-bottom: 8px;
       }
     }
   </style>
@@ -87,7 +91,7 @@
       });
 
       map.addListener('bounds_changed', function() {
-        fetchMarkers(); // Call this on map bounds change
+        fetchMarkers();
       });
 
       markerClusterer = new MarkerClusterer(map, markers, {
@@ -165,7 +169,7 @@
     }
 
     function createMarker(position, element) {
-      let title = element['tags/name'] || 'Bicycle Parking';
+      let title = element.formatted || 'Bicycle Parking';
       if (typeof title !== 'string') {
         title = String(title);
       }
@@ -184,7 +188,8 @@
 
       markers.push(marker);
       marker.addListener('click', () => {
-        let contentString = `<div class="info-content"><h3 class="info-title">${title}</h3><p>${element.formatted}</p>`;
+        let header = element.formatted || 'Address not available';
+        let contentString = `<div class="info-content"><div class="info-title">${header}</div>`;
 
         // Additional fields to display
         const additionalFields = [
