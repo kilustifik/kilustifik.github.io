@@ -34,6 +34,15 @@
         height: 60px;
         width: auto;
       }
+      .info-content {
+        font-size: 14px; /* Larger font for better readability */
+      }
+      .info-title {
+        font-size: 16px; /* Larger title font */
+      }
+      .info-detail {
+        margin-bottom: 5px; /* Spacing for readability */
+      }
     }
   </style>
 </head>
@@ -134,17 +143,13 @@
 
       markers.push(marker);
       marker.addListener('click', () => {
-        let contentString = `<div><h3>${element.tags.name || 'Bicycle Parking'}</h3>`;
+        let contentString = `<div class="info-content"><h3 class="info-title">${element.tags.name || 'Bicycle Parking'}</h3>`;
         Object.entries(element.tags).forEach(([key, value]) => {
           if (value) {
-            contentString += `<p><b>${key}:</b> ${value}</p>`;
+            contentString += `<p class="info-detail"><b>${key}:</b> ${value}</p>`;
           }
         });
         contentString += '</div>';
-
-        // Set the maximum width for the info window
-        infoWindow.setOptions({ maxWidth: 300 });
-
         infoWindow.setContent(contentString);
         infoWindow.open(map, marker);
       });
