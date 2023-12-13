@@ -102,7 +102,6 @@
             map.setCenter(pos);
             map.setZoom(12);
 
-            // Create or move the location marker
             if (!locationMarker) {
               locationMarker = new google.maps.Marker({
                 position: pos,
@@ -142,7 +141,7 @@
     }
 
     function fetchMarkers() {
-      fetch('https://storage.googleapis.com/bikebucket123/BikeRacksWithAddresses.json')
+      fetch('https://storage.googleapis.com/bikebucket123/BikeRacksWithAddressesOptimised.json')
         .then(response => response.json())
         .then(data => {
           data.forEach(element => {
@@ -183,4 +182,3 @@
   </script>
 </body>
 </html>
-
