@@ -66,7 +66,7 @@
   <div id="map"></div>
 
   <div class="footer">
-    <p>Developed by <a href="https://github.com/kilustifik" target="_blank">kilustifik</a></p>
+    <p>Developed by <a href="https://kilustifik.github.io" target="_blank">kilustifik</a></p>
   </div>
 
   <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
@@ -142,7 +142,7 @@
     }
 
     function fetchMarkers() {
-      fetch('https://storage.googleapis.com/bikebucket123/AusBikeParking.json')
+      fetch('https://storage.googleapis.com/bikebucket123/BikeRacksWithAddresses.json')
         .then(response => response.json())
         .then(data => {
           data.elements.forEach(element => {
@@ -182,13 +182,7 @@
 
       markers.push(marker);
       marker.addListener('click', () => {
-        let contentString = `<div class="info-content"><h3 class="info-title">${element.tags.name || 'Bicycle Parking'}</h3>`;
-        Object.entries(element.tags).forEach(([key, value]) => {
-          if (value) {
-            contentString += `<p class="info-detail"><b>${key}:</b> ${value}</p>`;
-          }
-        });
-        contentString += '</div>';
+        let contentString = `<div class="info-content"><h3 class="info-title">${element.tags.name || 'Bicycle Parking'}</h3><p>${element.tags.address}</p>`;
         infoWindow.setContent(contentString);
         infoWindow.open(map, marker);
       });
