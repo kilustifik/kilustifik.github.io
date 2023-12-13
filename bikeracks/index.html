@@ -12,17 +12,17 @@
     }
     h3 {
       margin: 0;
-      padding: 10px 20px;
+      padding: 10px 15px; /* Reduced padding for a smaller header banner */
       text-align: left;
       background-color: #101010;
       color: #fff;
       font-family: 'Gill Sans', sans-serif;
       display: flex;
       align-items: center;
-      height: 60px;
+      height: 50px; /* Reduced height for a smaller header banner */
     }
     #map {
-      height: calc(100% - 60px);
+      height: calc(100% - 50px); /* Adjust height to accommodate smaller header */
       width: 100%;
     }
     .footer {
@@ -32,16 +32,16 @@
       background-color: #101010;
       color: #fff;
       text-align: center;
-      padding: 5px 10px;
+      padding: 3px 7px; /* Reduced padding for a smaller footer box */
       font-family: 'Gill Sans', sans-serif;
       font-size: 12px;
-      border-radius: 2px;
+      border-radius: 4px;
       z-index: 1000;
     }
     .logo {
-      height: 40px;
+      height: 40px; /* Adjust logo size if necessary */
       width: auto;
-      margin-right: 15px;
+      margin-right: 10px; /* Adjust side margins if necessary */
     }
     .info-content {
       font-size: 16px;
@@ -50,7 +50,7 @@
     .info-title {
       font-size: 16px; /* Keep font size */
       margin: 0; /* Remove any default margins */
-      padding: 5px 10px; /* Reduce padding to decrease banner height */
+      padding: 5px 10px; /* Adjust padding to reduce banner height */
       background-color: #000; /* Maintain the black background */
       color: #fff; /* Text color */
     }
@@ -59,8 +59,14 @@
     }
     @media only screen and (max-width: 768px) {
       .logo {
-        height: 60px;
+        height: 35px; /* Adjust logo size on smaller screens if necessary */
         width: auto;
+      }
+      .info-content {
+        font-size: 14px; /* Adjust text size on smaller screens if necessary */
+      }
+      .info-title {
+        font-size: 14px; /* Adjust text size on smaller screens if necessary */
       }
     }
   </style>
@@ -69,7 +75,7 @@
   <h3><img src="https://storage.googleapis.com/bikebucket123/Bike%20Icon%20LT2.png" class="logo" alt="Logo">LT's Bike Racks Map</h3>
   <div id="map"></div>
   <div class="footer">
-    <p>Developed by <a href="https://github.com/kilustifik" target="_blank">kilustifik</a></p>
+    Developed by <a href="https://kilustifik.github.io" target="_blank">kilustifik</a>
   </div>
 
   <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
@@ -109,7 +115,7 @@
               lng: position.coords.longitude,
             };
             map.setCenter(pos);
-            map.setZoom(18);
+            map.setZoom(16);
 
             if (!locationMarker) {
               locationMarker = new google.maps.Marker({
