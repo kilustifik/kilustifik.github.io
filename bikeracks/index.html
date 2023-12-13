@@ -29,6 +29,22 @@
       width: auto;
       margin-right: 15px;
     }
+
+    /* Responsive design for desktops */
+    @media only screen and (min-width: 769px) {
+      .custom-marker-icon {
+        width: 40px;
+        height: 40px;
+      }
+    }
+
+    /* Responsive design for mobile devices */
+    @media only screen and (max-width: 768px) {
+      .logo {
+        height: 60px; /* Larger logo size for mobile */
+        width: auto;
+      }
+    }
   </style>
 </head>
 <body>
@@ -75,10 +91,17 @@
       });
     }
 
-    function fetchMarkers() {
-      const isMobile = window.innerWidth < 768;
-      const iconSize = isMobile ? new google.maps.Size(60, 60) : new google.maps.Size(40, 40);
+    function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+      infoWindow.setPosition(pos);
+      infoWindow.setContent(
+        browserHasGeolocation 
+          ? 'Error: The Geolocation service failed.'
+          : 'Error: Your browser doesn\'t support geolocation.'
+      );
+      infoWindow.open(map);
+    }
 
+    function fetchMarkers() {
       fetch('https://storage.googleapis.com/bikebucket123/AusBikeParking.json')
         .then(response => response.json())
         .then(data => {
@@ -96,7 +119,7 @@
             if (position) {
               const customIcon = {
                 url: 'https://storage.googleapis.com/bikebucket123/3448289.png',
-                scaledSize: iconSize
+                scaledSize: new google.maps.Size(60, 60) // Larger default size for better visibility on mobile
               };
 
               const marker = new google.maps.Marker({
@@ -123,16 +146,6 @@
           });
         })
         .catch(error => console.error('Error loading data: ', error));
-    }
-
-    function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-      infoWindow.setPosition(pos);
-      infoWindow.setContent(
-        browserHasGeolocation 
-          ? 'Error: The Geolocation service failed.'
-          : 'Error: Your browser doesn\'t support geolocation.'
-      );
-      infoWindow.open(map);
     }
 
     const apiKey = 'AIzaSyDjfeR-Ui2ydhCpRpiRlj7uEoajSMQ8_8c';
