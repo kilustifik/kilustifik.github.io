@@ -25,9 +25,17 @@
       width: 100%;
     }
     .logo {
-      height: 40px; /* Adjust as needed */
+      height: 40px; /* Default logo size */
       width: auto;
       margin-right: 15px;
+    }
+
+    /* Responsive design for mobile devices */
+    @media only screen and (max-width: 768px) {
+      .logo {
+        height: 60px; /* Larger logo size for mobile */
+        width: auto;
+      }
     }
   </style>
 </head>
@@ -41,9 +49,13 @@
     let map, infoWindow, customIcon, markerClusterer;
 
     function initMap() {
+      // Adjust icon size based on device width
+      const isMobile = window.innerWidth < 768;
+      const iconSize = isMobile ? new google.maps.Size(60, 60) : new google.maps.Size(40, 40);
+
       customIcon = {
         url: 'https://storage.googleapis.com/bikebucket123/3448289.png',
-        scaledSize: new google.maps.Size(40, 40)
+        scaledSize: iconSize
       };
 
       map = new google.maps.Map(document.getElementById('map'), {
@@ -87,7 +99,7 @@
     }
 
     function fetchMarkers(markers) {
-      fetch('https://storage.googleapis.com/bikebucket123/AusBikeParking.json') // Corrected URL
+      fetch('https://storage.googleapis.com/bikebucket123/AusBikeParking.json')
         .then(response => response.json())
         .then(data => {
           data.elements.forEach(element => {
