@@ -34,12 +34,8 @@
 <body>
   <h3><img src="https://storage.googleapis.com/bikebucket123/Bike%20Icon%20LT2.png" class="logo" alt="Logo">LT's Bike Racks Map</h3>
   <div id="map"></div>
-  </style>
-</head>
-<body>
-  <h3>LT's Bike Racks Map</h3>
-  <div id="map"></div>
 
+  <!-- Include MarkerClusterer library -->
   <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
   <script>
     let map, infoWindow, customIcon, markerClusterer;
@@ -58,6 +54,7 @@
       infoWindow = new google.maps.InfoWindow();
       const markers = []; // Array to hold all markers for clustering
 
+      // Attempt to center map on user's location
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           (position) => {
@@ -77,18 +74,20 @@
         handleLocationError(false, infoWindow, map.getCenter());
       }
 
+      // Fetch markers and create clusters
       fetchMarkers(markers);
     }
 
     function handleLocationError(browserHasGeolocation, infoWindow, pos) {
       infoWindow.setPosition(pos);
-      infoWindow.setContent(
-        browserHasGeolocation
-      );
+      infoWindow.setContent(browserHasGeolocation
+        ? 'Error: The Geolocation service failed.'
+        : 'Error: Your browser doesn\'t support geolocation.');
+      infoWindow.open(map);
     }
 
     function fetchMarkers(markers) {
-      fetch('https://storage.googleapis.com/bikebucket123/AusBikeParking.json.json')
+      fetch('https://storage.googleapis.com/bikebucket123/AusBikeParking.json') // Corrected URL
         .then(response => response.json())
         .then(data => {
           data.elements.forEach(element => {
@@ -132,10 +131,12 @@
         .catch(error => console.error('Error loading data: ', error));
     }
 
+    // Load the Google Maps API script with the corrected API callback
     const apiKey = 'AIzaSyDjfeR-Ui2ydhCpRpiRlj7uEoajSMQ8_8c';
     const script = document.createElement('script');
     script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap`;
     script.async = true;
+    script.defer = true;
     document.head.appendChild(script);
   </script>
 </body>
