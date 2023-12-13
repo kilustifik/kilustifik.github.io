@@ -141,26 +141,17 @@
       infoWindow.open(map);
     }
 
-function fetchMarkers() {
-  fetch('https://storage.googleapis.com/bikebucket123/BikeRacksWithAddressesOptimised.json')
-    .then(response => response.json())
-    .then(data => {
-      const bounds = map.getBounds();
-
-      data.forEach(element => {
-        let position = new google.maps.LatLng(element.lat, element.lon);
-        if (bounds.contains(position)) {
-          createMarker(position, element);
-        }
-      });
-    })
-    .catch(error => console.error('Error loading data: ', error));
-}
-
-// Listen to map bounds change event to load markers dynamically
-map.addListener('bounds_changed', function() {
-  fetchMarkers(); // You may need to implement checks to avoid duplicate markers.
-});
+    function fetchMarkers() {
+      fetch('https://storage.googleapis.com/bikebucket123/BikeRacksWithAddressesOptimised.json')
+        .then(response => response.json())
+        .then(data => {
+          data.forEach(element => {
+            let position = { lat: element.lat, lng: element.lon };
+            createMarker(position, element);
+          });
+        })
+        .catch(error => console.error('Error loading data: ', error));
+    }
 
     function createMarker(position, element) {
       let title = element['tags/name'] || 'Bicycle Parking';
