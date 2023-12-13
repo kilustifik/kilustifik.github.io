@@ -52,7 +52,10 @@
         center: { lat: -25.2744, lng: 133.7751 }
       });
 
-      infoWindow = new google.maps.InfoWindow();
+      infoWindow = new google.maps.InfoWindow({
+        maxWidth: 300, // Set the maximum width for the info window
+      });
+      
       handleGeolocation();
 
       fetchMarkers();
@@ -134,7 +137,7 @@
 
       markers.push(marker);
       marker.addListener('click', () => {
-        let contentString = `<div class="info-window-content"><h3>${element.tags.name || 'Bicycle Parking'}</h3>`;
+        let contentString = `<div><h3>${element.tags.name || 'Bicycle Parking'}</h3>`;
         Object.entries(element.tags).forEach(([key, value]) => {
           if (value) {
             contentString += `<p><b>${key}:</b> ${value}</p>`;
@@ -145,16 +148,6 @@
         infoWindow.open(map, marker);
       });
     }
-
-    // Create a new CSS rule for the info window content
-    const infoWindowStyle = document.createElement('style');
-    infoWindowStyle.innerHTML = `
-      .info-window-content {
-        max-width: 300px; /* Adjust the max width as needed */
-        padding: 10px;
-      }
-    `;
-    document.head.appendChild(infoWindowStyle);
 
     const apiKey = 'AIzaSyDjfeR-Ui2ydhCpRpiRlj7uEoajSMQ8_8c';
     const script = document.createElement('script');
