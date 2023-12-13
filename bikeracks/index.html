@@ -47,15 +47,13 @@
   <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
   <script>
     let map, infoWindow, customIcon, markerClusterer;
+    let markers = []; // Array to hold all markers for clustering
 
     function initMap() {
-      // Adjust icon size based on device width
-      const isMobile = window.innerWidth < 768;
-      const iconSize = isMobile ? new google.maps.Size(60, 60) : new google.maps.Size(40, 40);
-
       customIcon = {
         url: 'https://storage.googleapis.com/bikebucket123/3448289.png',
-        scaledSize: iconSize
+        // Set initial size, which will be updated based on screen width
+        scaledSize: new google.maps.Size(60, 60)
       };
 
       map = new google.maps.Map(document.getElementById('map'), {
@@ -64,7 +62,6 @@
       });
 
       infoWindow = new google.maps.InfoWindow();
-      const markers = []; // Array to hold all markers for clustering
 
       // Attempt to center map on user's location
       if (navigator.geolocation) {
@@ -87,7 +84,20 @@
       }
 
       // Fetch markers and create clusters
-      fetchMarkers(markers);
+      fetchMarkers();
+      
+      // Adjust icon sizes when the window is resized
+      window.addEventListener('resize', resizeIcons);
+    }
+
+    function resizeIcons() {
+      const isMobile = window.innerWidth < 768;
+      const iconSize = isMobile ? new google.maps.Size(60, 60) : new google.maps.Size(40, 40);
+      customIcon.scaledSize = iconSize;
+
+      markers.forEach(marker => {
+        marker.setIcon(customIcon);
+      });
     }
 
     function handleLocationError(browserHasGeolocation, infoWindow, pos) {
@@ -98,7 +108,7 @@
       infoWindow.open(map);
     }
 
-    function fetchMarkers(markers) {
+    function fetchMarkers() {
       fetch('https://storage.googleapis.com/bikebucket123/AusBikeParking.json')
         .then(response => response.json())
         .then(data => {
