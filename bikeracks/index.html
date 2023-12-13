@@ -11,37 +11,27 @@
     }
     h3 {
       margin: 0;
-      padding: 10px 20px; /* Adjusted padding for better alignment */
-      text-align: left; /* Aligns the text to the left */
-      background-color: #000; /* Black background */
-      color: #fff; /* White text */
-      font-family: 'Roboto', sans-serif; /* Modern font */
+      padding: 10px 20px;
+      text-align: left;
+      background-color: #000;
+      color: #fff;
+      font-family: 'Roboto', sans-serif;
       display: flex;
       align-items: center;
-      height: 60px; /* Slightly larger header height */
+      height: 60px;
     }
     #map {
-      height: calc(100% - 60px); /* Adjust the map height considering the new header size */
+      height: calc(100% - 60px);
       width: 100%;
     }
     .logo {
-      height: 40px; /* Default logo size */
+      height: 40px;
       width: auto;
       margin-right: 15px;
     }
-
-    /* Responsive design for desktops */
-    @media only screen and (min-width: 769px) {
-      .custom-marker-icon {
-        width: 40px;
-        height: 40px;
-      }
-    }
-
-    /* Responsive design for mobile devices */
     @media only screen and (max-width: 768px) {
       .logo {
-        height: 60px; /* Larger logo size for mobile */
+        height: 60px;
         width: auto;
       }
     }
@@ -51,11 +41,10 @@
   <h3><img src="https://storage.googleapis.com/bikebucket123/Bike%20Icon%20LT2.png" class="logo" alt="Logo">LT's Bike Racks Map</h3>
   <div id="map"></div>
 
-  <!-- Include MarkerClusterer library -->
   <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
   <script>
     let map, infoWindow, markerClusterer;
-    let markers = []; // Array to hold all markers for clustering
+    let markers = []; 
 
     function initMap() {
       map = new google.maps.Map(document.getElementById('map'), {
@@ -64,7 +53,17 @@
       });
 
       infoWindow = new google.maps.InfoWindow();
+      handleGeolocation();
 
+      fetchMarkers();
+      
+      markerClusterer = new MarkerClusterer(map, markers, {
+        imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
+        maxZoom: 15
+      });
+    }
+
+    function handleGeolocation() {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           (position) => {
@@ -75,20 +74,13 @@
             map.setCenter(pos);
             map.setZoom(12);
           }, 
-          () => {
+          (error) => {
             handleLocationError(true, infoWindow, map.getCenter());
           }
         );
       } else {
         handleLocationError(false, infoWindow, map.getCenter());
       }
-
-      fetchMarkers();
-      
-      markerClusterer = new MarkerClusterer(map, markers, {
-        imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
-        maxZoom: 15 // Clustering stops at this zoom level
-      });
     }
 
     function handleLocationError(browserHasGeolocation, infoWindow, pos) {
@@ -106,46 +98,52 @@
         .then(response => response.json())
         .then(data => {
           data.elements.forEach(element => {
-            let position;
-            if (element.type === 'node') {
-              position = { lat: element.lat, lng: element.lon };
-            } else if (element.type === 'way' && element.bounds) {
-              position = {
-                lat: (element.bounds.minlat + element.bounds.maxlat) / 2,
-                lng: (element.bounds.minlon + element.bounds.maxlon) / 2
-              };
-            }
-
+            let position = getElementPosition(element);
             if (position) {
-              const customIcon = {
-                url: 'https://storage.googleapis.com/bikebucket123/3448289.png',
-                scaledSize: new google.maps.Size(60, 60) // Larger default size for better visibility on mobile
-              };
-
-              const marker = new google.maps.Marker({
-                position: position,
-                icon: customIcon,
-                map: map,
-                title: element.tags.name || 'Bicycle Parking'
-              });
-
-              markers.push(marker);
-
-              marker.addListener('click', () => {
-                let contentString = `<div><h3>${element.tags.name || 'Bicycle Parking'}</h3>`;
-                Object.entries(element.tags).forEach(([key, value]) => {
-                  if (value) {
-                    contentString += `<p><b>${key}:</b> ${value}</p>`;
-                  }
-                });
-                contentString += '</div>';
-                infoWindow.setContent(contentString);
-                infoWindow.open(map, marker);
-              });
+              createMarker(position, element);
             }
           });
         })
         .catch(error => console.error('Error loading data: ', error));
+    }
+
+    function getElementPosition(element) {
+      if (element.type === 'node') {
+        return { lat: element.lat, lng: element.lon };
+      } else if (element.type === 'way' && element.bounds) {
+        return {
+          lat: (element.bounds.minlat + element.bounds.maxlat) / 2,
+          lng: (element.bounds.minlon + element.bounds.maxlon) / 2
+        };
+      }
+      return null;
+    }
+
+    function createMarker(position, element) {
+      const customIcon = {
+        url: 'https://storage.googleapis.com/bikebucket123/3448289.png',
+        scaledSize: new google.maps.Size(60, 60)
+      };
+
+      const marker = new google.maps.Marker({
+        position: position,
+        icon: customIcon,
+        map: map,
+        title: element.tags.name || 'Bicycle Parking'
+      });
+
+      markers.push(marker);
+      marker.addListener('click', () => {
+        let contentString = `<div><h3>${element.tags.name || 'Bicycle Parking'}</h3>`;
+        Object.entries(element.tags).forEach(([key, value]) => {
+          if (value) {
+            contentString += `<p><b>${key}:</b> ${value}</p>`;
+          }
+        });
+        contentString += '</div>';
+        infoWindow.setContent(contentString);
+        infoWindow.open(map, marker);
+      });
     }
 
     const apiKey = 'AIzaSyDjfeR-Ui2ydhCpRpiRlj7uEoajSMQ8_8c';
