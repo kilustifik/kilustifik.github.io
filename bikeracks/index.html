@@ -52,7 +52,7 @@
     function initMap() {
       customIcon = {
         url: 'https://storage.googleapis.com/bikebucket123/3448289.png',
-        scaledSize: new google.maps.Size(40, 40) // This size will be updated on resize
+        scaledSize: new google.maps.Size(40, 40) // Default size, will be updated on resize
       };
 
       map = new google.maps.Map(document.getElementById('map'), {
@@ -82,31 +82,22 @@
 
       fetchMarkers();
       
-      // Initialize the MarkerClusterer with mobile-friendly sizes
       markerClusterer = new MarkerClusterer(map, markers, {
         imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
         maxZoom: 15 // Clustering stops at this zoom level
       });
 
       // Adjust icon sizes when the window is resized
-      window.addEventListener('resize', resizeClusterIcons);
-      resizeClusterIcons(); // Call once for initial sizing
+      window.addEventListener('resize', resizeIcons);
+      resizeIcons(); // Call once for initial sizing
     }
 
-    function resizeClusterIcons() {
+    function resizeIcons() {
       const isMobile = window.innerWidth < 768;
-      const maxZoom = isMobile ? 14 : 15;
-      const size = isMobile ? new google.maps.Size(60, 60) : new google.maps.Size(40, 40);
-      const style = {
-        url: "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m1.png",
-        height: size.height,
-        width: size.width,
-        textColor: 'white',
-        textSize: 16
-      };
-
-      markerClusterer.setStyles([style]);
-      markerClusterer.setMaxZoom(maxZoom);
+      const iconSize = isMobile ? new google.maps.Size(60, 60) : new google.maps.Size(40, 40);
+      
+      customIcon.scaledSize = iconSize;
+      markers.forEach(marker => marker.setIcon(customIcon));
     }
 
     function handleLocationError(browserHasGeolocation, infoWindow, pos) {
@@ -157,14 +148,10 @@
               });
             }
           });
-
-          // Update cluster icons once markers are fetched
-          resizeClusterIcons();
         })
         .catch(error => console.error('Error loading data: ', error));
     }
 
-    // Load the Google Maps API script with the corrected API callback
     const apiKey = 'AIzaSyDjfeR-Ui2ydhCpRpiRlj7uEoajSMQ8_8c';
     const script = document.createElement('script');
     script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap`;
