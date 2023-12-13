@@ -2,13 +2,13 @@
 <html>
 <head>
   <title>LT's Bike Racks Map</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Ensure proper scaling on mobile devices -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     html, body {
       height: 100%;
       margin: 0;
       padding: 0;
-      overflow: hidden; /* Prevent scrollbars */
+      overflow: hidden;
     }
     h3 {
       margin: 0;
@@ -16,13 +16,13 @@
       text-align: left;
       background-color: #101010;
       color: #fff;
-      font-family: 'Gill Sans', sans-serif; /* Changed font to Gill Sans */
+      font-family: 'Gill Sans', sans-serif;
       display: flex;
       align-items: center;
       height: 60px;
     }
     #map {
-      height: calc(100% - 50px); /* Adjust height to accommodate smaller footer and uncut zoom buttons */
+      height: calc(100% - 50px);
       width: 100%;
     }
     .footer {
@@ -32,10 +32,10 @@
       background-color: #101010;
       color: #fff;
       text-align: center;
-      padding: 2px 0; /* Further reduced padding for smaller footer */
+      padding: 2px 0;
       font-family: 'Gill Sans', sans-serif;
-      font-size: 12px; /* Maintained font size */
-      line-height: 1.2; /* Adjust line height if needed for better appearance */
+      font-size: 12px;
+      line-height: 1.2;
     }
     .logo {
       height: 40px;
@@ -48,19 +48,15 @@
         width: auto;
       }
       .info-content {
-        font-size: 16px; /* Further increase font size */
-        max-width: 300px; /* Set a max width for the info window */
+        font-size: 16px;
+        max-width: 300px;
       }
       .info-title {
-        font-size: 16px; /* Increase title font size */
+        font-size: 16px;
       }
       .info-detail {
-        margin-bottom: 8px; /* Increase spacing */
+        margin-bottom: 8px;
       }
-    }
-    /* Ensure map controls do not overlap the footer */
-    .gm-bundled-control {
-      bottom: 50px; /* This selector might need to be more specific depending on the actual map control classes used by Google Maps */
     }
   </style>
 </head>
@@ -68,15 +64,14 @@
   <h3><img src="https://storage.googleapis.com/bikebucket123/Bike%20Icon%20LT2.png" class="logo" alt="Logo">LT's Bike Racks Map</h3>
   <div id="map"></div>
 
-  <!-- Reduced Size Credits Footer -->
   <div class="footer">
     <p>Developed by <a href="https://kilustifik.github.io" target="_blank">kilustifik</a></p>
   </div>
 
   <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
   <script>
-    let map, infoWindow, markerClusterer;
-    let markers = []; 
+    let map, infoWindow, markerClusterer, locationMarker;
+    let markers = [];
 
     function initMap() {
       map = new google.maps.Map(document.getElementById('map'), {
@@ -88,23 +83,10 @@
       handleGeolocation();
 
       fetchMarkers();
-      
+
       markerClusterer = new MarkerClusterer(map, markers, {
         imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
         maxZoom: 15
-      });
-
-      // Adjust map controls to prevent overlap with footer
-      map.setOptions({
-        zoomControlOptions: {
-          position: google.maps.ControlPosition.RIGHT_BOTTOM
-        },
-        streetViewControlOptions: {
-          position: google.maps.ControlPosition.RIGHT_BOTTOM
-        },
-        mapTypeControlOptions: {
-          position: google.maps.ControlPosition.TOP_RIGHT
-        }
       });
     }
 
@@ -118,10 +100,29 @@
             };
             map.setCenter(pos);
             map.setZoom(12);
+
+            if (locationMarker) {
+              locationMarker.setPosition(pos);
+            } else {
+              locationMarker = new google.maps.Marker({
+                position: pos,
+                map: map,
+                icon: {
+                  path: google.maps.SymbolPath.CIRCLE,
+                  scale: 7,
+                  fillColor: '#4285F4',
+                  fillOpacity: 1,
+                  strokeColor: 'white',
+                  strokeWeight: 2
+                },
+                title: 'Your Location'
+              });
+            }
           }, 
           (error) => {
             handleLocationError(true, infoWindow, map.getCenter());
-          }
+          },
+          { enableHighAccuracy: true }
         );
       } else {
         handleLocationError(false, infoWindow, map.getCenter());
