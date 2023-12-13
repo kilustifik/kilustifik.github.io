@@ -52,8 +52,7 @@
     function initMap() {
       customIcon = {
         url: 'https://storage.googleapis.com/bikebucket123/3448289.png',
-        // Set initial size, which will be updated based on screen width
-        scaledSize: new google.maps.Size(60, 60)
+        scaledSize: new google.maps.Size(40, 40) // This size will be updated on resize
       };
 
       map = new google.maps.Map(document.getElementById('map'), {
@@ -63,7 +62,6 @@
 
       infoWindow = new google.maps.InfoWindow();
 
-      // Attempt to center map on user's location
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           (position) => {
@@ -71,10 +69,9 @@
               lat: position.coords.latitude,
               lng: position.coords.longitude,
             };
-
             map.setCenter(pos);
             map.setZoom(12);
-          },
+          }, 
           () => {
             handleLocationError(true, infoWindow, map.getCenter());
           }
@@ -83,28 +80,42 @@
         handleLocationError(false, infoWindow, map.getCenter());
       }
 
-      // Fetch markers and create clusters
       fetchMarkers();
       
+      // Initialize the MarkerClusterer with mobile-friendly sizes
+      markerClusterer = new MarkerClusterer(map, markers, {
+        imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
+        maxZoom: 15 // Clustering stops at this zoom level
+      });
+
       // Adjust icon sizes when the window is resized
-      window.addEventListener('resize', resizeIcons);
+      window.addEventListener('resize', resizeClusterIcons);
+      resizeClusterIcons(); // Call once for initial sizing
     }
 
-    function resizeIcons() {
+    function resizeClusterIcons() {
       const isMobile = window.innerWidth < 768;
-      const iconSize = isMobile ? new google.maps.Size(60, 60) : new google.maps.Size(40, 40);
-      customIcon.scaledSize = iconSize;
+      const maxZoom = isMobile ? 14 : 15;
+      const size = isMobile ? new google.maps.Size(60, 60) : new google.maps.Size(40, 40);
+      const style = {
+        url: "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m1.png",
+        height: size.height,
+        width: size.width,
+        textColor: 'white',
+        textSize: 16
+      };
 
-      markers.forEach(marker => {
-        marker.setIcon(customIcon);
-      });
+      markerClusterer.setStyles([style]);
+      markerClusterer.setMaxZoom(maxZoom);
     }
 
     function handleLocationError(browserHasGeolocation, infoWindow, pos) {
       infoWindow.setPosition(pos);
-      infoWindow.setContent(browserHasGeolocation
-        ? 'Error: The Geolocation service failed.'
-        : 'Error: Your browser doesn\'t support geolocation.');
+      infoWindow.setContent(
+        browserHasGeolocation 
+          ? 'Error: The Geolocation service failed.'
+          : 'Error: Your browser doesn\'t support geolocation.'
+      );
       infoWindow.open(map);
     }
 
@@ -127,6 +138,7 @@
               const marker = new google.maps.Marker({
                 position: position,
                 icon: customIcon,
+                map: map,
                 title: element.tags.name || 'Bicycle Parking'
               });
 
@@ -146,9 +158,8 @@
             }
           });
 
-          markerClusterer = new MarkerClusterer(map, markers, {
-            imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'
-          });
+          // Update cluster icons once markers are fetched
+          resizeClusterIcons();
         })
         .catch(error => console.error('Error loading data: ', error));
     }
