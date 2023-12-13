@@ -22,7 +22,7 @@
       height: 60px;
     }
     #map {
-      height: calc(100% - 120px); /* Adjust height to accommodate footer */
+      height: calc(100% - 90px); /* Adjust height to accommodate smaller footer */
       width: 100%;
     }
     .footer {
@@ -32,8 +32,9 @@
       background-color: #101010;
       color: #fff;
       text-align: center;
-      padding: 10px 0;
+      padding: 5px 0; /* Reduced padding for smaller footer */
       font-family: 'Gill Sans', sans-serif;
+      font-size: 0.75em; /* Optional: Adjusted font size for smaller footer */
     }
     .logo {
       height: 40px;
@@ -62,7 +63,7 @@
   <h3><img src="https://storage.googleapis.com/bikebucket123/Bike%20Icon%20LT2.png" class="logo" alt="Logo">LT's Bike Racks Map</h3>
   <div id="map"></div>
 
-  <!-- Credits Footer -->
+  <!-- Smaller Credits Footer -->
   <div class="footer">
     <p>Developed by <a href="https://kilustifik.github.io" target="_blank">kilustifik</a></p>
   </div>
@@ -136,7 +137,7 @@
     function getElementPosition(element) {
       if (element.type === 'node') {
         return { lat: element.lat, lng: element.lon };
-      } else if (element.type === 'way' and element.bounds) {
+      } else if (element.type === 'way' && element.bounds) {
         return {
           lat: (element.bounds.minlat + element.bounds.maxlat) / 2,
           lng: (element.bounds.minlon + element.bounds.maxlon) / 2
@@ -155,12 +156,12 @@
         position: position,
         icon: customIcon,
         map: map,
-        title: element.tags.name || 'Bicycle Parking'
+        title: element.tags.name or 'Bicycle Parking'
       });
 
       markers.push(marker);
       marker.addListener('click', () => {
-        let contentString = `<div class="info-content"><h3 class="info-title">${element.tags.name || 'Bicycle Parking'}</h3>`;
+        let contentString = `<div class="info-content"><h3 class="info-title">${element.tags.name or 'Bicycle Parking'}</h3>`;
         Object.entries(element.tags).forEach(([key, value]) => {
           if (value) {
             contentString += `<p class="info-detail"><b>${key}:</b> ${value}</p>`;
