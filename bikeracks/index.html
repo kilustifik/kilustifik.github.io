@@ -181,7 +181,7 @@
       }
 
       const customIcon = {
-        url: 'https://storage.googleapis.com/bikebucket123/3448289.png',
+        url: 'https://storage.googleapis.com/bikebucket123/3448289.png', // Custom marker icon link in google buckets
         scaledSize: new google.maps.Size(60, 60)
       };
 
@@ -238,7 +238,7 @@
       return str.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
     }
 
-    const apiKey = 'AIzaSyDjfeR-Ui2ydhCpRpiRlj7uEoajSMQ8_8c'; // Replace with your actual API key
+    const apiKey = 'AIzaSyDjfeR-Ui2ydhCpRpiRlj7uEoajSMQ8_8c'; // Maps API key
     const script = document.createElement('script');
     script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap`;
     script.async = true;
