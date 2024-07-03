@@ -78,7 +78,7 @@
     Developed by <a href="https://github.com/kilustifik" target="_blank">kilustifik</a>
   </div>
 
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDjfeR-Ui2ydhCpRpiRlj7uEoajSMQ8_8c&callback=initMap" async defer></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDjfeR-Ui2ydhCpRpiRlj7uEoajSMQ8_8c&callback=initMap&v=weekly" async defer></script>
   <script src="https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"></script>
   <script>
     let map, infoWindow, locationMarker;
@@ -114,21 +114,14 @@
             map.setZoom(16);
 
             if (!locationMarker) {
-              locationMarker = new google.maps.Marker({
+              locationMarker = new google.maps.marker.AdvancedMarkerElement({
                 position: pos,
                 map: map,
-                icon: {
-                  path: google.maps.SymbolPath.CIRCLE,
-                  scale: 7,
-                  fillColor: '#4285F4',
-                  fillOpacity: 1,
-                  strokeColor: 'white',
-                  strokeWeight: 2
-                },
+                content: `<div style="background-color: #4285F4; width: 14px; height: 14px; border-radius: 50%; border: 2px solid white;"></div>`,
                 title: 'Your Location'
               });
             } else {
-              locationMarker.setPosition(pos);
+              locationMarker.position = pos;
             }
           }, 
           (error) => {
