@@ -81,8 +81,8 @@
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDjfeR-Ui2ydhCpRpiRlj7uEoajSMQ8_8c&callback=initMap" async defer></script>
   <script src="https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"></script>
   <script>
-    let map, infoWindow, markerClusterer, locationMarker;
-    let markers = [];
+    let map, infoWindow, locationMarker;
+    const markers = [];
 
     function initMap() {
       map = new google.maps.Map(document.getElementById('map'), {
@@ -100,8 +100,6 @@
       map.addListener('bounds_changed', function() {
         fetchMarkers();
       });
-
-      markerClusterer = new markerClusterer.MarkerClusterer({ map, markers, maxZoom: 15 });
     }
 
     function handleGeolocation() {
@@ -168,6 +166,8 @@
               }
             }
           });
+
+          new markerClusterer.MarkerClusterer({ map, markers, maxZoom: 15 });
         })
         .catch(error => console.error('Error loading data: ', error));
     }
