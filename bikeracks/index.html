@@ -145,11 +145,14 @@
           .then(response => response.json())
           .then(data => {
             const bounds = map.getBounds();
+            if (!bounds) {
+              console.error('Map bounds not available');
+              return;
+            }
 
             data.forEach(element => {
               const position = new google.maps.LatLng(element.lat, element.lon);
               if (bounds.contains(position)) {
-                // Check if marker already exists to avoid duplicates
                 if (!markers.some(marker => marker.position.equals(position))) {
                   createMarker(position, element);
                 }
@@ -174,11 +177,10 @@
         });
 
         markers.push(marker);
-        marker.addListener('click', () => {
+        marker.addEventListener('click', () => {
           let header = element.formatted || 'Address not available';
           let contentString = `<div class="info-content"><div class="info-title">${header}</div>`;
 
-          // Additional fields to display
           const additionalFields = [
             "capacity",
             "covered",
@@ -209,7 +211,7 @@
             }
           });
 
-          contentString += '</div>'; // Close info-content div
+          contentString += '</div>';
           infoWindow.setContent(contentString);
           infoWindow.open(map, marker);
         });
