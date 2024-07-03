@@ -102,7 +102,6 @@
             if (!locationMarker) {
               const markerContent = document.createElement('div');
               markerContent.className = 'custom-location-marker';
-
               locationMarker = new google.maps.marker.AdvancedMarkerElement({
                 position: pos,
                 map: map,
@@ -221,7 +220,7 @@
     }
 
     const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDjfeR-Ui2ydhCpRpiRlj7uEoajSMQ8_8c&callback=initMap`;
+    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDjfeR-Ui2ydhCpRpiRlj7uEoajSMQ8_8c&callback=initMap&libraries=marker`;
     script.async = true;
     script.defer = true;
     document.head.appendChild(script);
