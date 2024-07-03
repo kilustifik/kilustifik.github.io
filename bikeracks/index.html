@@ -78,8 +78,10 @@
     Developed by <a href="https://github.com/kilustifik" target="_blank">kilustifik</a>
   </div>
 
-  <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
-  <script>
+  <script type="module">
+    import { Loader } from '@googlemaps/js-api-loader';
+    import { MarkerClusterer } from "@googlemaps/markerclusterer";
+
     let map, infoWindow, markerClusterer, locationMarker;
     let markers = [];
 
@@ -100,10 +102,7 @@
         fetchMarkers();
       });
 
-      markerClusterer = new MarkerClusterer(map, markers, {
-        imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
-        maxZoom: 15
-      });
+      markerClusterer = new MarkerClusterer({ map, markers, maxZoom: 15 });
     }
 
     function handleGeolocation() {
@@ -233,20 +232,20 @@
         infoWindow.open(map, marker);
       });
     }
-    
+
     function capitalize(str) {
       return str.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
     }
 
-    const apiKey = 'AIzaSyDjfeR-Ui2ydhCpRpiRlj7uEoajSMQ8_8c'; // Maps API key.
-    const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap`;
-    script.async = true;
-    script.defer = true;
-    document.head.appendChild(script);
-  </script>
-</body>
-</html>
+    const loader = new Loader({
+      apiKey: 'AIzaSyDjfeR-Ui2ydhCpRpiRlj7uEoajSMQ8_8c',
+      version: "weekly",
+      libraries: ["places"]
+    });
+
+    loader.load().then(() => {
+      initMap();
+    });
   </script>
 </body>
 </html>
