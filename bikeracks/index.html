@@ -12,17 +12,17 @@
     }
     h3 {
       margin: 0;
-      padding: 10px 15px; /* Reduced padding for a smaller header-banner */
+      padding: 10px 15px;
       text-align: left;
       background-color: #101010;
       color: #fff;
       font-family: 'Gill Sans', sans-serif;
       display: flex;
       align-items: center;
-      height: 45px; /* Reduced height for a smaller header banner */
+      height: 45px;
     }
     #map {
-      height: calc(100% - 45px); /* Adjust height to accommodate smaller header. */
+      height: calc(100% - 45px);
       width: 100%;
     }
     .footer {
@@ -32,41 +32,41 @@
       background-color: #101010;
       color: #fff;
       text-align: center;
-      padding: 3px 7px; /* Reduced padding for a smaller footer box. */
+      padding: 3px 7px;
       font-family: 'Gill Sans', sans-serif;
       font-size: 12px;
       border-radius: 4px;
       z-index: 1000;
     }
     .logo {
-      height: 40px; /* Adjust logo size if necessary. */
+      height: 40px;
       width: auto;
-      margin-right: 10px; /* Adjust side margins if necessary. */
+      margin-right: 10px;
     }
     .info-content {
       font-size: 16px;
       max-width: 300px;
     }
     .info-title {
-      font-size: 16px; /* Keep font size */
-      margin: 0; /* Remove any default margins */
-      padding: 5px 10px; /* Adjust padding to reduce banner height */
-      background-color: #000; /* Maintain black background */
-      color: #fff; /* Text color */
+      font-size: 16px;
+      margin: 0;
+      padding: 5px 10px;
+      background-color: #000;
+      color: #fff;
     }
     .info-detail {
       margin-bottom: 8px;
     }
     @media only screen and (max-width: 768px) {
       .logo {
-        height: 35px; /* Adjust logo size on smaller screens if necessary. */
+        height: 35px;
         width: auto;
       }
       .info-content {
-        font-size: 14px; /* Adjust text size on smaller screens if necessary. */
+        font-size: 14px;
       }
       .info-title {
-        font-size: 14px; /* Adjust text size on smaller screens if necessary. */
+        font-size: 14px;
       }
     }
   </style>
@@ -177,7 +177,7 @@
         });
 
         markers.push(marker);
-        marker.addEventListener('click', () => {
+        google.maps.event.addListener(marker, 'click', () => {
           let header = element.formatted || 'Address not available';
           let contentString = `<div class="info-content"><div class="info-title">${header}</div>`;
 
