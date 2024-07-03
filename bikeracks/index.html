@@ -122,13 +122,8 @@
         handleLocationError(false, infoWindow, map.getCenter());
       }
 
-      google.maps.event.addListenerOnce(map, 'idle', function() {
-        fetchMarkers();
-      });
-
-      map.addListener('bounds_changed', function() {
-        fetchMarkers();
-      });
+      google.maps.event.addListenerOnce(map, 'idle', fetchMarkers);
+      map.addListener('bounds_changed', fetchMarkers);
 
       function handleLocationError(browserHasGeolocation, infoWindow, pos) {
         infoWindow.setPosition(pos);
