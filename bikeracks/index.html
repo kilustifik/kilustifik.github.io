@@ -79,15 +79,18 @@
   </div>
 
   <script>
+    let map;
+    let markerCluster;
+    const markers = [];
+
     function initMap() {
-      const map = new google.maps.Map(document.getElementById('map'), {
+      map = new google.maps.Map(document.getElementById('map'), {
         zoom: 4,
         center: { lat: -25.2744, lng: 133.7751 },
-        mapId: '5e8f1935352f935c'  // Using the provided Map ID
+        mapId: '5e8f1935352f935c'
       });
 
       const infoWindow = new google.maps.InfoWindow();
-      const markers = [];
       let locationMarker;
 
       if (navigator.geolocation) {
@@ -145,16 +148,19 @@
               return;
             }
 
+            const newMarkers = [];
             data.forEach(element => {
               const position = new google.maps.LatLng(element.lat, element.lon);
               if (bounds.contains(position)) {
-                if (!markers.some(marker => marker.position.equals(position))) {
-                  createMarker(position, element);
-                }
+                newMarkers.push(createMarker(position, element));
               }
             });
 
-            new markerClusterer.MarkerClusterer({ map, markers, maxZoom: 15 });
+            if (markerCluster) {
+              markerCluster.clearMarkers();
+            }
+
+            markerCluster = new markerClusterer.MarkerClusterer({ map, markers: newMarkers, maxZoom: 15 });
           })
           .catch(error => console.error('Error loading data: ', error));
       }
@@ -171,7 +177,6 @@
           title: title
         });
 
-        markers.push(marker);
         google.maps.event.addListener(marker, 'click', () => {
           let header = element.formatted || 'Address not available';
           let contentString = `<div class="info-content"><div class="info-title">${header}</div>`;
@@ -210,6 +215,8 @@
           infoWindow.setContent(contentString);
           infoWindow.open(map, marker);
         });
+
+        return marker;
       }
 
       function capitalize(str) {
