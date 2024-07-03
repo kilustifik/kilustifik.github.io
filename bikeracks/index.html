@@ -78,10 +78,9 @@
     Developed by <a href="https://github.com/kilustifik" target="_blank">kilustifik</a>
   </div>
 
-  <script type="module">
-    import { Loader } from '@googlemaps/js-api-loader';
-    import { MarkerClusterer } from "@googlemaps/markerclusterer";
-
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDjfeR-Ui2ydhCpRpiRlj7uEoajSMQ8_8c&callback=initMap" async defer></script>
+  <script src="https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"></script>
+  <script>
     let map, infoWindow, markerClusterer, locationMarker;
     let markers = [];
 
@@ -102,7 +101,7 @@
         fetchMarkers();
       });
 
-      markerClusterer = new MarkerClusterer({ map, markers, maxZoom: 15 });
+      markerClusterer = new markerClusterer.MarkerClusterer({ map, markers, maxZoom: 15 });
     }
 
     function handleGeolocation() {
@@ -236,16 +235,6 @@
     function capitalize(str) {
       return str.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
     }
-
-    const loader = new Loader({
-      apiKey: 'AIzaSyDjfeR-Ui2ydhCpRpiRlj7uEoajSMQ8_8c',
-      version: "weekly",
-      libraries: ["places"]
-    });
-
-    loader.load().then(() => {
-      initMap();
-    });
   </script>
 </body>
 </html>
