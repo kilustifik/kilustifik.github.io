@@ -117,7 +117,7 @@
               locationMarker = new google.maps.marker.AdvancedMarkerElement({
                 position: pos,
                 map: map,
-                content: `<div style="background-color: #4285F4; width: 14px; height: 14px; border-radius: 50%; border: 2px solid white;"></div>`,
+                content: document.createElement('div'),
                 title: 'Your Location'
               });
             } else {
@@ -176,12 +176,14 @@
         scaledSize: new google.maps.Size(60, 60)
       };
 
-      const marker = new google.maps.Marker({
+      const marker = new google.maps.marker.AdvancedMarkerElement({
         position: position,
-        icon: customIcon,
         map: map,
+        content: document.createElement('div'),
         title: title
       });
+
+      marker.content.innerHTML = `<img src="${customIcon.url}" width="${customIcon.scaledSize.width}" height="${customIcon.scaledSize.height}">`;
 
       markers.push(marker);
       marker.addListener('click', () => {
