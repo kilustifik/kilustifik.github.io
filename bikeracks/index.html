@@ -114,14 +114,21 @@
             map.setZoom(16);
 
             if (!locationMarker) {
-              locationMarker = new google.maps.marker.AdvancedMarkerElement({
+              locationMarker = new google.maps.Marker({
                 position: pos,
                 map: map,
-                content: document.createElement('div'),
+                icon: {
+                  path: google.maps.SymbolPath.CIRCLE,
+                  scale: 7,
+                  fillColor: '#4285F4',
+                  fillOpacity: 1,
+                  strokeColor: 'white',
+                  strokeWeight: 2
+                },
                 title: 'Your Location'
               });
             } else {
-              locationMarker.position = pos;
+              locationMarker.setPosition(pos);
             }
           }, 
           (error) => {
@@ -176,14 +183,12 @@
         scaledSize: new google.maps.Size(60, 60)
       };
 
-      const marker = new google.maps.marker.AdvancedMarkerElement({
+      const marker = new google.maps.Marker({
         position: position,
+        icon: customIcon,
         map: map,
-        content: document.createElement('div'),
         title: title
       });
-
-      marker.content.innerHTML = `<img src="${customIcon.url}" width="${customIcon.scaledSize.width}" height="${customIcon.scaledSize.height}">`;
 
       markers.push(marker);
       marker.addListener('click', () => {
@@ -233,3 +238,4 @@
   </script>
 </body>
 </html>
+
