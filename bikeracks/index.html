@@ -100,21 +100,16 @@
             map.setZoom(16);
 
             if (!locationMarker) {
-              locationMarker = new google.maps.Marker({
+              locationMarker = new google.maps.marker.AdvancedMarkerElement({
                 position: pos,
                 map: map,
-                icon: {
-                  path: google.maps.SymbolPath.CIRCLE,
-                  scale: 7,
-                  fillColor: '#4285F4',
-                  fillOpacity: 1,
-                  strokeColor: 'white',
-                  strokeWeight: 2
-                },
+                content: document.createElement('div'),
                 title: 'Your Location'
               });
+
+              locationMarker.content.classList.add('custom-location-marker');
             } else {
-              locationMarker.setPosition(pos);
+              locationMarker.position = pos;
             }
           },
           () => {
@@ -154,7 +149,7 @@
               const position = new google.maps.LatLng(element.lat, element.lon);
               if (bounds.contains(position)) {
                 // Check if marker already exists to avoid duplicates
-                if (!markers.some(marker => marker.getPosition().equals(position))) {
+                if (!markers.some(marker => marker.position.equals(position))) {
                   createMarker(position, element);
                 }
               }
@@ -167,15 +162,13 @@
 
       function createMarker(position, element) {
         const title = element.formatted || 'Bicycle Parking';
-        const customIcon = {
-          url: 'https://storage.googleapis.com/bikebucket123/3448289.png', // Custom marker icon link in google buckets.
-          scaledSize: new google.maps.Size(60, 60)
-        };
+        const content = document.createElement('div');
+        content.innerHTML = `<img src="https://storage.googleapis.com/bikebucket123/3448289.png" width="60" height="60" alt="${title}">`;
 
-        const marker = new google.maps.Marker({
+        const marker = new google.maps.marker.AdvancedMarkerElement({
           position: position,
-          icon: customIcon,
           map: map,
+          content: content,
           title: title
         });
 
@@ -233,5 +226,16 @@
     document.head.appendChild(script);
   </script>
   <script src="https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"></script>
+
+  <style>
+    .custom-location-marker {
+      width: 14px;
+      height: 14px;
+      background-color: #4285F4;
+      border-radius: 50%;
+      border: 2px solid white;
+    }
+  </style>
 </body>
 </html>
+
