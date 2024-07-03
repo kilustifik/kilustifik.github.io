@@ -100,14 +100,15 @@
             map.setZoom(16);
 
             if (!locationMarker) {
+              const markerContent = document.createElement('div');
+              markerContent.className = 'custom-location-marker';
+
               locationMarker = new google.maps.marker.AdvancedMarkerElement({
                 position: pos,
                 map: map,
-                content: document.createElement('div'),
+                content: markerContent,
                 title: 'Your Location'
               });
-
-              locationMarker.content.classList.add('custom-location-marker');
             } else {
               locationMarker.position = pos;
             }
@@ -162,13 +163,13 @@
 
       function createMarker(position, element) {
         const title = element.formatted || 'Bicycle Parking';
-        const content = document.createElement('div');
-        content.innerHTML = `<img src="https://storage.googleapis.com/bikebucket123/3448289.png" width="60" height="60" alt="${title}">`;
+        const markerContent = document.createElement('div');
+        markerContent.innerHTML = `<img src="https://storage.googleapis.com/bikebucket123/3448289.png" width="60" height="60" alt="${title}">`;
 
         const marker = new google.maps.marker.AdvancedMarkerElement({
           position: position,
           map: map,
-          content: content,
+          content: markerContent,
           title: title
         });
 
@@ -238,4 +239,3 @@
   </style>
 </body>
 </html>
-
